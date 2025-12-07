@@ -1,48 +1,16 @@
-# 🎓 Student Academic Risk Prediction (Early Warning System)
+🎓 Sistem Prediksi Risiko Mahasiswa (Early Warning System)Tugas Besar (MID) - Applied Machine LearningProject ini bertujuan untuk mendeteksi dini mahasiswa yang berisiko mengalami kegagalan akademik berdasarkan tren nilai indeks prestasi (SGPA & CGPA).📋 Daftar IsiTentang ProjectProfil PengembangDatasetMetodologi & Alur KerjaTeknologi yang DigunakanFitur AplikasiCara Menjalankan📖 Tentang ProjectInstitusi pendidikan seringkali terlambat menyadari adanya mahasiswa yang mengalami penurunan performa akademik. Evaluasi biasanya baru dilakukan setelah hasil ujian keluar dengan status Fail atau Pass with Grace, sehingga intervensi dosen wali menjadi tidak efektif.Sistem Peringatan Dini (Early Warning System) ini dibangun menggunakan algoritma Machine Learning (Random Forest Classifier) untuk mengklasifikasikan mahasiswa ke dalam dua kategori:AMAN: Mahasiswa dengan performa stabil.BERISIKO: Mahasiswa yang berpotensi gagal atau membutuhkan bimbingan khusus.Sistem ini telah dideploy menggunakan Gradio sehingga dapat digunakan dengan mudah melalui antarmuka web interaktif.👤 Profil PengembangAtributDetailNamaAldi SaputraNIM105841115923Kelas5AI-A (5E)Program StudiInformatikaFakultasTeknikUniversitasUniversitas Muhammadiyah Makassar📊 DatasetProject ini menggunakan College Exam Result Dataset (College Exam Result Dataset data hasil ujiangrade.csv).Jumlah Data: 62 Mahasiswa (Sampel).Fitur Utama (Input):SGPA (Semester Grade Point Average): Indeks prestasi semester.CGPA (Cumulative Grade Point Average): Indeks prestasi kumulatif.Target (Output): Status Risiko (Diturunkan dari kolom Result Description).Pass ➔ Aman (0)Fail / Pass with Grace ➔ Berisiko (1)⚙️ Metodologi & Alur KerjaProject ini mengikuti standar CRISP-DM (Cross-Industry Standard Process for Data Mining):Business Understanding: Memahami kebutuhan intervensi dini akademik.Data Understanding & Preparation:Pembersihan data (Handling Missing Values).Transformasi label target menjadi biner (0/1).Seleksi fitur fokus pada SGPA dan CGPA.Modeling:Algoritma: Random Forest Classifier.Alasan: Akurasi tinggi, stabil (ensemble learning), dan mampu menangani hubungan non-linear antara nilai IPK dan risiko.Evaluation: Menggunakan Accuracy dan Confusion Matrix (fokus pada Recall untuk meminimalkan risiko mahasiswa gagal yang tidak terdeteksi).Deployment: Implementasi model ke antarmuka web menggunakan Gradio.🛠 Teknologi yang DigunakanBahasa Pemrograman: PythonAnalisis Data: Pandas, NumPyMachine Learning: Scikit-Learn (Random Forest)Visualisasi: Matplotlib / SeabornDeployment / GUI: Gradio🚀 Fitur AplikasiAplikasi menyediakan antarmuka sederhana di mana pengguna (Dosen/Staff) dapat:Menggeser Slider SGPA (0 - 10).Menggeser Slider CGPA (0 - 10).Melihat hasil prediksi secara Real-time:✅ Status: AMAN⚠️ Status: BERISIKO💻 Cara MenjalankanIkuti langkah-langkah berikut untuk menjalankan project ini di komputer lokal Anda atau Google Colab:1. Persiapan EnvironmentPastikan Python sudah terinstal. Install library yang dibutuhkan:Bashpip install pandas scikit-learn gradio
+2. Jalankan NotebookBuka file Project_Aldi.ipynb menggunakan Jupyter Notebook, VS Code, atau Google Colab.3. Eksekusi KodeJalankan semua sel (cells) secara berurutan.Load Data: Script akan memuat College Exam Result Dataset data hasil ujiangrade.csv.Training: Model Random Forest akan dilatih.Interface: Pada sel terakhir, Gradio akan meluncurkan aplikasi.4. Akses AplikasiSetelah dijalankan, link lokal akan muncul (contoh: http://127.0.0.1:7860). Klik link tersebut untuk menggunakan aplikasi.Python# Snippet Kode Utama (Deployment)
+import gradio as gr
 
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
-![Library](https://img.shields.io/badge/Library-Scikit--Learn%20%7C%20Pandas-orange)
-![Deployment](https://img.shields.io/badge/Deployment-Gradio-green)
+def prediksi_cepat(sgpa, cgpa):
+    hasil = rf_model.predict([[sgpa, cgpa]])[0]
+    return "BERISIKO" if hasil == 1 else "AMAN"
 
-## 📋 Project Overview
-This project is a Data Science initiative designed to build an **Early Warning System (EWS)** for higher education institutions. By analyzing historical academic data (SGPA and CGPA), the system predicts whether a student is in a **"Safe"** zone or **"At Risk"** of failing/dropping out.
-
-The goal is to assist academic counselors in identifying struggling students early, allowing for timely intervention before the final exams.
-
-## 🚀 Features
-- **Data Analysis:** automatic cleaning and preprocessing of student exam results.
-- **Machine Learning Model:** Uses **Random Forest Classifier** for high-accuracy prediction.
-- **Risk Classification:**
-  - 🟢 **Safe:** Predicted to Pass.
-  - 🔴 **At Risk:** Predicted to Fail or Pass with Grace.
-- **Web Interface:** Interactive dashboard using **Gradio** for real-time predictions.
-
-## 📂 Dataset
-The project uses the **College Exam Result Dataset 2025**.
-- **Source:** University Academic Records (B.Tech Program).
-- **Key Features used for Modeling:**
-  1. **SGPA** (Semester Grade Point Average)
-  2. **CGPA** (Cumulative Grade Point Average)
-- **Target Variable:** Derived from `Result Description` (PASS vs FAIL/GRACE).
-
-## 🛠️ Tech Stack
-* **Language:** Python
-* **Data Processing:** Pandas, NumPy
-* **Machine Learning:** Scikit-Learn (Random Forest)
-* **Deployment/UI:** Gradio
-
-## 📊 Project Workflow (CRISP-DM)
-1.  **Business Understanding:** Identifying the need to reduce dropout rates.
-2.  **Data Understanding:** Analyzing the correlation between SGPA/CGPA and failure rates.
-3.  **Data Preparation:** * Handling missing values.
-    * Label Encoding (`PASS` -> 0, `FAIL/GRACE` -> 1).
-4.  **Modeling:** Training a Random Forest Classifier with 50 estimators.
-5.  **Evaluation:** Achieving high accuracy with low false negatives (high recall for risk detection).
-6.  **Deployment:** Creating a user-friendly web app.
-
-## 💻 How to Run This Project
-
-### 1. Clone the Repository
-```bash
-git clone [https://github.com/your-username/student-risk-prediction.git](https://github.com/your-username/student-risk-prediction.git)
-cd student-risk-prediction
+app = gr.Interface(
+    fn=prediksi_cepat,
+    inputs=[gr.Slider(0, 10, label="Nilai SGPA"), gr.Slider(0, 10, label="Nilai CGPA")],
+    outputs="text",
+    title="Sistem Prediksi Risiko Mahasiswa"
+)
+app.launch()
+Dibuat untuk memenuhi Tugas Besar Mata Kuliah Applied Machine Learning - 2025.
